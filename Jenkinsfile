@@ -6,14 +6,19 @@ pipeline {
   stages {
     stage('Build') {
       parallel {
-        stage('Build') {
+        stage('Setup') {
           steps {
             bat(script: 'yarn --verbose install', returnStatus: true, returnStdout: true)
           }
         }
+        stage('Build') {
+          steps {
+            bat(script: 'yarn build', returnStatus: true, returnStdout: true)
+          }
+        }
         stage('Test') {
           steps {
-            bat(script: 'yarn flow', returnStatus: true, returnStdout: true)
+            bat(script: 'yarn test', returnStatus: true, returnStdout: true)
           }
         }
       }
