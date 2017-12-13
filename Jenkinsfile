@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        bat(script: 'yarn install', returnStatus: true, returnStdout: true)
+        bat(script: 'yarn --verbose install', returnStatus: true, returnStdout: true)
       }
     }
   }
