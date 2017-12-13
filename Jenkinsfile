@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        bat(script: 'npm install', returnStatus: true, returnStdout: true)
+        bat(script: 'yarn install', returnStatus: true, returnStdout: true)
       }
     }
   }
