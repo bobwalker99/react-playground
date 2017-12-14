@@ -23,13 +23,13 @@ pipeline {
         stage('Test') {
           steps {
             parallel(
-                linux: {
-                    sh(script: 'yarn test', returnStatus: true)
-                },
-                windows: {
-                    bat(script: 'yarn test', returnStatus: true)
-                }
-            failFast=false)
+              linux: {
+                sh(script: 'yarn test', returnStatus: true)
+              },
+              windows: {
+                bat(script: 'yarn test', returnStatus: true)
+              },
+              failFast: false)
           }
         }
       }
