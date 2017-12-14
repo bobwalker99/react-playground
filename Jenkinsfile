@@ -1,16 +1,13 @@
 pipeline {
   agent any
-  environment {
-    CI = 'true'
-  }
   stages {
-    stage('Build') {
+    stage('Setup') {
+      steps {
+        bat(script: 'yarn --verbose install', returnStatus: true, returnStdout: true)
+      }
+    }
+    stage('Quality') {
       parallel {
-        stage('Setup') {
-          steps {
-            bat(script: 'yarn --verbose install', returnStatus: true, returnStdout: true)
-          }
-        }
         stage('Build') {
           steps {
             bat(script: 'yarn build', returnStatus: true, returnStdout: true)
@@ -23,5 +20,8 @@ pipeline {
         }
       }
     }
+  }
+  environment {
+    CI = 'true'
   }
 }
