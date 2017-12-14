@@ -10,22 +10,26 @@ pipeline {
       parallel {
         stage('Build') {
           steps {
-            if (isUnix()) {
-              sh(script: 'yarn build', returnStatus: true)
-            }
-            else {
-              bat(script: 'yarn build', returnStatus: true)
-            }
-          }
+            parallel(
+              linux: {
+                sh(script: 'yarn build', returnStatus: true)
+              },
+              windows: {
+                bat(script: 'yarn build', returnStatus: true)
+              },
+              failFast: false)
+           }
         }
         stage('Test') {
           steps {
-            if (isUnix()) {
-              sh(script: 'yarn test', returnStatus: true)
-            }
-            else {
-              bat(script: 'yarn test', returnStatus: true)
-            }
+            parallel(
+                linux: {
+                    sh(script: 'yarn test', returnStatus: true)
+                },
+                windows: {
+                    bat(script: 'yarn test', returnStatus: true)
+                }
+            failFast=false)
           }
         }
       }
