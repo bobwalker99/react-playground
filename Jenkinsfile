@@ -3,19 +3,29 @@ pipeline {
   stages {
     stage('Setup') {
       steps {
-        bat(script: 'yarn --verbose install', returnStatus: true, returnStdout: true)
+        bat(script: 'yarn --verbose install', returnStatus: true)
       }
     }
     stage('Quality') {
       parallel {
         stage('Build') {
           steps {
-            bat(script: 'yarn build', returnStatus: true, returnStdout: true)
+            if (isUnix()) {
+              sh(script: 'yarn build', returnStatus: true)
+            }
+            else {
+              bat(script: 'yarn build', returnStatus: true)
+            }
           }
         }
         stage('Test') {
           steps {
-            bat(script: 'yarn test', returnStatus: true, returnStdout: true)
+            if (isUnix()) {
+              sh(script: 'yarn test', returnStatus: true)
+            }
+            else {
+              bat(script: 'yarn test', returnStatus: true)
+            }
           }
         }
       }
