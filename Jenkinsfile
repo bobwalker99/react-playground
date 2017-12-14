@@ -9,27 +9,43 @@ pipeline {
     stage('Quality') {
       parallel {
         stage('Build') {
-          steps {
-            parallel(
-              linux: {
-                sh(script: 'yarn build', returnStatus: true)
-              },
-              windows: {
+          parallel {
+            stage('Build On Windows') {
+              agent {
+                label "windows"
+              }
+              steps {
                 bat(script: 'yarn build', returnStatus: true)
-              },
-              failFast: false)
-           }
+              }
+            }
+            stage('Test On Linux') {
+              agent {
+                label "linux"
+              }
+              steps {
+                sh(script: 'yarn build', returnStatus: true)
+              }
+            }
+          }
         }
         stage('Test') {
-          steps {
-            parallel(
-              linux: {
-                sh(script: 'yarn test', returnStatus: true)
-              },
-              windows: {
+          parallel {
+            stage('Test On Windows') {
+              agent {
+                label "windows"
+              }
+              steps {
                 bat(script: 'yarn test', returnStatus: true)
-              },
-              failFast: false)
+              }
+            }
+            stage('Test On Linux') {
+              agent {
+                label "linux"
+              }
+              steps {
+                sh(script: 'yarn test', returnStatus: true)
+              }
+            }
           }
         }
       }
